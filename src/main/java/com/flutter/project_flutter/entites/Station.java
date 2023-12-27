@@ -1,6 +1,8 @@
 package com.flutter.project_flutter.entites;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -17,7 +19,10 @@ public class Station {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+    @NotNull
+    @NotEmpty
     private String stationName;
+
     private String longitude;
     private String latitude;
     private boolean status = true;

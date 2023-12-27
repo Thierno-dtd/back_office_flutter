@@ -3,49 +3,58 @@ package com.flutter.project_flutter.servicesimpl;
 import com.flutter.project_flutter.constants.TypeRoles;
 import com.flutter.project_flutter.dto.UserDto;
 import com.flutter.project_flutter.entites.User;
+import com.flutter.project_flutter.exceptions.EntityNotFoundException;
 import com.flutter.project_flutter.mappers.ApplicationMappers;
 import com.flutter.project_flutter.repositories.UserRepository;
 import com.flutter.project_flutter.services.IUserServices;
-import lombok.AllArgsConstructor;
-import lombok.extern.java.Log;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
 //@AllArgsConstructor
 @Slf4j
+@RequiredArgsConstructor
 public class UserService implements IUserServices {
-    @Autowired
-    private UserRepository usersRepository;
-    @Autowired
-    private ApplicationMappers applicationMappers;
-
-    @Override
-    public UserDto register(UserDto userDto) {
-        return applicationMappers.convertEntityToDto(
-                usersRepository.save(applicationMappers.convertDtoToEntity(userDto))
-        );
-    }
+    private final UserRepository usersRepository;
+    private final ApplicationMappers applicationMappers;
 
     @Override
     public UserDto registerByAdmin(UserDto userDto) {
         if(userDto==null){
             log.error("user pass is not valid");
         }
+        return applicationMappers.convertEntityToDto(
+                usersRepository.save(applicationMappers.convertDtoToEntity(userDto))
+        );
+    }
+
+    @Override
+    public UserDto rechargeSolde(int id, BigDecimal somme) {
+        UserDto userDto = getOneUser(id);
+       /* if(userDto == null)
+        {
+            // je te laisse gerer
+        }
+        if*/
+        userDto.setSolde(somme.add(userDto.getSolde()));
+        return  userDto;
+    }
+
+    @Override
+    public UserDto register(UserDto userDto) {
+        if(userDto==null){
+            log.error("user pass is not valid");
+        }
         User user =  applicationMappers.convertDtoToEntity(userDto);
         user.setRoles(
-                Collections
-                        .singleton(
-                                TypeRoles.USER.toString()
-                        )
+                Collections.singleton(TypeRoles.USER.toString())
         );
         return applicationMappers.convertEntityToDto(
                 usersRepository.save(user)
@@ -63,7 +72,8 @@ public class UserService implements IUserServices {
 
     @Override
     public UserDto getOneUser(int id) {
-        User user =  usersRepository.findById(id).orElseThrow(() -> new RuntimeException("user not find"));
+        User user =  usersRepository.findById(id).orElse(null);
+        if(user == null) throw new EntityNotFoundException("user not find");
         return applicationMappers.convertEntityToDto(user);
 
     }

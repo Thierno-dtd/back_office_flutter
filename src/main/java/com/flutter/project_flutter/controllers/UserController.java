@@ -3,10 +3,13 @@ package com.flutter.project_flutter.controllers;
 import com.flutter.project_flutter.constants.TypeRoles;
 import com.flutter.project_flutter.dto.UserDto;
 import com.flutter.project_flutter.servicesimpl.UserService;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
+import lombok.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @RestController
@@ -26,7 +29,7 @@ public class UserController {
     }
 
     @PostMapping("/add")
-    public ResponseEntity<UserDto> registerUser(@RequestBody UserDto userDto){
+    public ResponseEntity<UserDto> registerUser(@Valid @RequestBody UserDto userDto){
         return ResponseEntity.ok(userService.register(userDto));
     }
 
@@ -37,15 +40,20 @@ public class UserController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<UserDto> ModifyUser(@PathVariable int id,@RequestBody UserDto userDto){
+    public ResponseEntity<UserDto> ModifyUser(@PathVariable int id,@Valid @RequestBody UserDto userDto){
         return ResponseEntity.ok(userService.updateUser(userDto, id));
     }
 
-    @PostMapping("/users")
-    public ResponseEntity<UserDto> createUser(@RequestHeader("creator") UserDto creator, @RequestBody UserDto user) {
+    @PostMapping("/add")
+    public ResponseEntity<UserDto> createUser(@Valid @RequestHeader("creator") UserDto creator,@Valid @RequestBody UserDto user) {
         if(creator.getRoles().contains(TypeRoles.ADMIN.toString())){
             return ResponseEntity.ok(userService.registerByAdmin(user));
         }
         return null;
+    }
+
+    @PostMapping("/{id}/{somme}")
+    public  ResponseEntity <UserDto> RechargeSolde(@PathVariable("id") int id,@PathVariable("somme") BigDecimal somme){
+        return ResponseEntity.ok(userService.rechargeSolde(id, somme));
     }
 }
