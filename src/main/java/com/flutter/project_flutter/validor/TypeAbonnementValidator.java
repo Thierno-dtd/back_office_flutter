@@ -8,7 +8,7 @@ import java.util.List;
 
 public class TypeAbonnementValidator {
 
-    public List<String> validate (TypeAbonnementDto typeAbonnementDto){
+    public static List<String> validate (TypeAbonnementDto typeAbonnementDto){
         List<String> errors = new ArrayList<>();
         return errors;
     }

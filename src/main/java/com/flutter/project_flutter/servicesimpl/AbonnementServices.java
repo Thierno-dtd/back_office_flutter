@@ -5,6 +5,7 @@ import com.flutter.project_flutter.dto.AbonnementDtoEntity;
 import com.flutter.project_flutter.dto.UserDto;
 import com.flutter.project_flutter.entites.Abonnement;
 import com.flutter.project_flutter.entites.User;
+import com.flutter.project_flutter.exceptions.EntityNotFoundException;
 import com.flutter.project_flutter.mappers.ApplicationMappers;
 import com.flutter.project_flutter.repositories.AbonnementRepository;
 import com.flutter.project_flutter.repositories.UserRepository;
@@ -58,13 +59,15 @@ public class AbonnementServices implements IAbonnementServices {
 
     @Override
     public AbonnementDtoEntity getOneAbonnement(int id) {
-        Abonnement abonnement =  abonnementRepository.findById(id).orElseThrow(() -> new RuntimeException("abonnement not find"));
+        Abonnement abonnement =  abonnementRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("abonnement not found"));
         return applicationMappers.convertEntityToDto(abonnement);
     }
 
     @Override
     public void deleteAbonnement(int id) {
-        Abonnement abonnement  = abonnementRepository.findById(id).orElseThrow(() -> new RuntimeException("Abonnement not find to delete"));
+        Abonnement abonnement  = abonnementRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Abonnement not found to delete"));
         abonnementRepository.delete(abonnement);
     }
 }

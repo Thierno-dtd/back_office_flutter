@@ -9,7 +9,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@RestController @AllArgsConstructor
+@RestController
+@AllArgsConstructor
 public class AbonnementController {
     private AbonnementServices abonnementServices;
 

@@ -2,6 +2,8 @@ package com.flutter.project_flutter.servicesimpl;
 
 import com.flutter.project_flutter.dto.StationDto;
 import com.flutter.project_flutter.entites.Station;
+import com.flutter.project_flutter.exceptions.EntityNotFoundException;
+import com.flutter.project_flutter.exceptions.InvalidOperationException;
 import com.flutter.project_flutter.mappers.ApplicationMappers;
 import com.flutter.project_flutter.repositories.StationRepository;
 import com.flutter.project_flutter.services.IStationServices;
@@ -21,7 +23,7 @@ public class StationServices implements IStationServices {
     @Override
     public StationDto registerStation(StationDto stationDto) {
         Optional<Station> findstation = this.stationRepository.findByStationName(stationDto.getStationName());
-        if(findstation.isPresent() || stationDto == null) throw new RuntimeException("Ce Email est deja utiliser");
+        if(findstation.isPresent() || stationDto == null) throw new InvalidOperationException("Ce Email est deja utiliser");
         Station station = applicationMappers.convertDtoToEntity(stationDto);
         return applicationMappers
                 .convertEntityToDto(
@@ -38,19 +40,21 @@ public class StationServices implements IStationServices {
 
     @Override
     public StationDto getOneStation(int id) {
-        Station station =  stationRepository.findById(id).orElseThrow(() -> new RuntimeException("Station not find"));
+        Station station =  stationRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Station not find"));
         return applicationMappers.convertEntityToDto(station);
     }
 
     @Override
     public void deleteStation(int id) {
-        Station station  = stationRepository.findById(id).orElseThrow(() -> new RuntimeException("station not find to delete"));
+        Station station  = stationRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("station not find to delete"));
         stationRepository.delete(station);
     }
 
     @Override
     public StationDto updateStation(StationDto stationDto, int id) {
-        if(getOneStation(id) == null) new RuntimeException(" La station que vous désirer modifier n'existe pas");
+        if(getOneStation(id) == null) new EntityNotFoundException(" La station que vous désirer modifier n'existe pas");
         Station station = applicationMappers.convertDtoToEntity(stationDto);
         station.setId(id);
         return applicationMappers.convertEntityToDto(stationRepository.save(station));

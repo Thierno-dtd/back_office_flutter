@@ -4,6 +4,8 @@ import com.flutter.project_flutter.dto.DepenseEssenceDto;
 import com.flutter.project_flutter.dto.DepenseEssenceDtoEntity;
 import com.flutter.project_flutter.entites.Abonnement;
 import com.flutter.project_flutter.entites.DepenseEssence;
+import com.flutter.project_flutter.exceptions.EntityNotFoundException;
+import com.flutter.project_flutter.exceptions.InvalidOperationException;
 import com.flutter.project_flutter.mappers.ApplicationMappers;
 import com.flutter.project_flutter.repositories.AbonnementRepository;
 import com.flutter.project_flutter.repositories.DepenseEssenceRepository;
@@ -38,11 +40,11 @@ public class DepenseEssenceServices implements IDepenseEssenceServices {
 float nbre_litre_restant = abonnement.getNbre_litre()-abonnement.getNbre_litre_use();
         if ( nbre_litre_restant < depenseEssence.getNbreLitreConsommer()) {
             if (nbre_litre_restant == 0.0f) {
-                new RuntimeException("Vous aviez plus de litre d'essence disponible pour cette abonnement ");
+                new InvalidOperationException("Vous aviez plus de litre d'essence disponible pour cette abonnement ");
                 return DepenseEssenceDtoEntity.builder().build();
             }
             else {
-                new RuntimeException("Le nombre de litre consommé est superieur que ce que vous aviez sur le compte, il vous reste a payer pour "+(depenseEssence.getNbreLitreConsommer()-nbre_litre_restant)+"l.");
+                new InvalidOperationException("Le nombre de litre consommé est superieur que ce que vous aviez sur le compte, il vous reste a payer pour "+(depenseEssence.getNbreLitreConsommer()-nbre_litre_restant)+"l.");
                 abonnement
                         .setNbre_litre_use(
                                 abonnement
@@ -71,13 +73,15 @@ float nbre_litre_restant = abonnement.getNbre_litre()-abonnement.getNbre_litre_u
 
     @Override
     public DepenseEssenceDtoEntity getOneDepenseEssence(int id) {
-        DepenseEssence depenseEssence =  depenseEssenceRepository.findById(id).orElseThrow(() -> new RuntimeException("depenseEssence not find"));
+        DepenseEssence depenseEssence =  depenseEssenceRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("depenseEssence not find"));
         return applicationMappers.convertEntityToDto(depenseEssence);
     }
 
     @Override
     public void deleteDepenseEssence(int id) {
-        DepenseEssence depenseEssence  = depenseEssenceRepository.findById(id).orElseThrow(() -> new RuntimeException("depenseEssence not find to delete"));
+        DepenseEssence depenseEssence  = depenseEssenceRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("depenseEssence not find to delete"));
         depenseEssenceRepository.delete(depenseEssence);
     }
 }
