@@ -47,20 +47,6 @@ public class UserService implements IUserServices {
         userDto.setSolde(somme.add(userDto.getSolde()));
         return  userDto;
     }
-
-    @Override
-    public UserDto register(UserDto userDto) {
-        if(userDto==null){
-            log.error("user pass is not valid");
-        }
-
-        return applicationMappers.convertEntityToDto(
-                usersRepository.save( applicationMappers.convertDtoToEntity(userDto))
-        );
-    }
-
-
-
     @Override
     public List<UserDto> getAllUsers() {
         List<User> listUser =  usersRepository.findAll();

@@ -17,4 +17,16 @@ public class AuthenticationController {
     public ResponseEntity<AuthenticationResponse> authenticate(@RequestBody AuthenticationRequest request){
         return ResponseEntity.ok(authenticationService.authenticate(request));
     }
+    @PostMapping(value = "/registerUser")
+    public ResponseEntity<AuthenticationResponse> registerUer(@RequestBody RegisterRequest request){
+        return ResponseEntity.ok(authenticationService.register(request));
+    }
+    @PostMapping(value = "/registerAdmin")
+    public ResponseEntity<AuthenticationResponse> registerAdmin(@RequestBody RegisterRequest request){
+        return ResponseEntity.ok(authenticationService.registerAdmin(request));
+    }
+    @PostMapping(value = "/registerPartenaire")
+    public ResponseEntity<AuthenticationResponse> registerPartenaire(@RequestBody RegisterRequest request){
+        return ResponseEntity.ok(authenticationService.registerPartenaire(request));
+    }
 }
