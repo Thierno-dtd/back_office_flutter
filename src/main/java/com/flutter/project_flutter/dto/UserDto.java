@@ -25,7 +25,7 @@ public class UserDto {
     private String passwd;
     private BigDecimal solde;
 
-    private Collection<String> roles;
+    private TypeRoles roles;
 
     public static UserDto fromEntity(User user){
         if(user==null){
@@ -37,6 +37,7 @@ public class UserDto {
                 .passwd(user.getPasswd())
                 .pname(user.getPname())
                 .email(user.getEmail())
+                .roles(user.getRoles())
                 .solde(user.getSolde())
                 .build();
     }
@@ -49,6 +50,7 @@ public class UserDto {
         user.setName(userDto.getName());
         user.setPname(userDto.getPname());
         user.setEmail(userDto.getEmail());
+        user.setRoles(userDto.getRoles());
         user.setPasswd(userDto.getPasswd());
         user.setSolde(userDto.getSolde());
         return  user;
