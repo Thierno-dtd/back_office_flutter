@@ -28,11 +28,6 @@ public class UserController {
         return ResponseEntity.ok(userService.getOneUser(id));
     }
 
-    @PostMapping("/add")
-    public ResponseEntity<UserDto> registerUser(@Valid @RequestBody UserDto userDto){
-        return ResponseEntity.ok(userService.register(userDto));
-    }
-
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteUser(@PathVariable int id){
         userService.deleteUser(id);
@@ -43,15 +38,6 @@ public class UserController {
     public ResponseEntity<UserDto> ModifyUser(@PathVariable int id,@Valid @RequestBody UserDto userDto){
         return ResponseEntity.ok(userService.updateUser(userDto, id));
     }
-
-    @PostMapping("/add")
-    public ResponseEntity<UserDto> createUser(@Valid @RequestHeader("creator") UserDto creator,@Valid @RequestBody UserDto user) {
-        if(creator.getRoles().equals(TypeRoles.ADMIN)){
-            return ResponseEntity.ok(userService.registerByAdmin(user));
-        }
-        return null;
-    }
-
     @PostMapping("/{id}/{somme}")
     public  ResponseEntity <UserDto> RechargeSolde(@PathVariable("id") int id,@PathVariable("somme") BigDecimal somme){
         return ResponseEntity.ok(userService.rechargeSolde(id, somme));

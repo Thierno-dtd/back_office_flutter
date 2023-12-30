@@ -9,7 +9,6 @@ import java.util.List;
 
 @Service
 public interface IUserServices {
-    public UserDto register(UserDto user);
     public List<UserDto> getAllUsers();
     public UserDto getOneUser(int id) throws EntityNotFoundException;
     public void deleteUser(int id);
