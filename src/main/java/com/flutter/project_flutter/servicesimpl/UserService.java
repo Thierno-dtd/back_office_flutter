@@ -4,6 +4,7 @@ import com.flutter.project_flutter.constants.TypeRoles;
 import com.flutter.project_flutter.dto.UserDto;
 import com.flutter.project_flutter.entites.User;
 import com.flutter.project_flutter.exceptions.EntityNotFoundException;
+import com.flutter.project_flutter.exceptions.InvalidEntityException;
 import com.flutter.project_flutter.mappers.ApplicationMappers;
 import com.flutter.project_flutter.repositories.UserRepository;
 import com.flutter.project_flutter.services.IUserServices;
@@ -80,13 +81,13 @@ public class UserService implements IUserServices {
 
     @Override
     public void deleteUser(int id) {
-        User user = usersRepository.findById(id).orElseThrow(() -> new RuntimeException("user not find to delete"));
+        User user = usersRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("user not find to delete"));
         usersRepository.delete(user);
     }
 
     @Override
     public UserDto updateUser(UserDto userDto, int id) {
-        if(getOneUser(id) ==null) new RuntimeException("l'user que vous vouliez modifier n'existe pas");
+        if(getOneUser(id) ==null) new InvalidEntityException("l'user que vous vouliez modifier n'existe pas");
         User user = applicationMappers.convertDtoToEntity(userDto);
         user.setId(id);
         if(user.getRoles() == null){

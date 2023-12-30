@@ -4,6 +4,8 @@ import com.flutter.project_flutter.dto.TypeAbonnementDto;
 import com.flutter.project_flutter.dto.UserDto;
 import com.flutter.project_flutter.entites.TypeAbonnement;
 import com.flutter.project_flutter.entites.User;
+import com.flutter.project_flutter.exceptions.EntityNotFoundException;
+import com.flutter.project_flutter.exceptions.InvalidEntityException;
 import com.flutter.project_flutter.mappers.ApplicationMappers;
 import com.flutter.project_flutter.repositories.TypeAbonnementRepository;
 import com.flutter.project_flutter.services.ITypeAbonnementService;
@@ -11,6 +13,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
+import javax.swing.text.html.parser.Entity;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -23,7 +26,7 @@ public class TypeAbonnementService implements ITypeAbonnementService {
     @Override
     public TypeAbonnementDto registerTypeAbonnement(TypeAbonnementDto typeAbonnementDto) {
         Optional<TypeAbonnement> findTypeAbonne = this.typesAbonnementRepository.findByLibelle(typeAbonnementDto.getLibelle());
-        if(findTypeAbonne.isPresent() || typeAbonnementDto == null) throw new RuntimeException("Ce type existe deja ou objet vide");
+        if(findTypeAbonne.isPresent() || typeAbonnementDto == null) throw new InvalidEntityException("Ce type existe deja ou objet vide");
         TypeAbonnement typeAbonnement = applicationMappers.convertDtoToEntity(typeAbonnementDto);
         System.out.println(typeAbonnementDto);
         System.out.println(typeAbonnement);
@@ -43,20 +46,21 @@ public class TypeAbonnementService implements ITypeAbonnementService {
 
     @Override
     public TypeAbonnementDto getOneTypeAbonnement(int id) {
-        TypeAbonnement typeAbonnement =  typesAbonnementRepository.findById(id).orElseThrow(() -> new RuntimeException("TypeAbonnement not find"));
+        TypeAbonnement typeAbonnement =  typesAbonnementRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("TypeAbonnement not found"));
         return applicationMappers.convertEntityToDto(typeAbonnement);
 
     }
 
     @Override
     public void deleteTypeAbonnement(int id) {
-        TypeAbonnement typeAbonnement = typesAbonnementRepository.findById(id).orElseThrow(() -> new RuntimeException("TypeAbonnement not find to delete"));
+        TypeAbonnement typeAbonnement = typesAbonnementRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("TypeAbonnement not find to delete"));
         typesAbonnementRepository.delete(typeAbonnement);
     }
 
     @Override
     public TypeAbonnementDto updateTA(TypeAbonnementDto typeAbonnementDto, int id) {
-        if(getOneTypeAbonnement(id) == null) new RuntimeException("Le type d'abonnelent que vous voulez modifier n'existe pas");
+        if(getOneTypeAbonnement(id) == null) new EntityNotFoundException("Le type d'abonnelent que vous voulez modifier n'existe pas");
         TypeAbonnement typeAbonnement = applicationMappers.convertDtoToEntity(typeAbonnementDto);
         typeAbonnement.setId(id);
         return applicationMappers.convertEntityToDto(typesAbonnementRepository.save(typeAbonnement));
