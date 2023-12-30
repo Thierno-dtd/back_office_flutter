@@ -46,7 +46,7 @@ public class UserController {
 
     @PostMapping("/add")
     public ResponseEntity<UserDto> createUser(@Valid @RequestHeader("creator") UserDto creator,@Valid @RequestBody UserDto user) {
-        if(creator.getRoles().contains(TypeRoles.ADMIN.toString())){
+        if(creator.getRoles().equals(TypeRoles.ADMIN)){
             return ResponseEntity.ok(userService.registerByAdmin(user));
         }
         return null;
