@@ -53,12 +53,9 @@ public class UserService implements IUserServices {
         if(userDto==null){
             log.error("user pass is not valid");
         }
-        User user =  applicationMappers.convertDtoToEntity(userDto);
-        user.setRoles(
-                Collections.singleton(TypeRoles.USER.toString())
-        );
+
         return applicationMappers.convertEntityToDto(
-                usersRepository.save(user)
+                usersRepository.save( applicationMappers.convertDtoToEntity(userDto))
         );
     }
 
@@ -91,7 +88,7 @@ public class UserService implements IUserServices {
         User user = applicationMappers.convertDtoToEntity(userDto);
         user.setId(id);
         if(user.getRoles() == null){
-            Collection<String> roles = usersRepository.findById(user.getId()).get().getRoles();
+           TypeRoles roles = usersRepository.findById(user.getId()).get().getRoles();
             user.setRoles(roles);
             }
        return applicationMappers.convertEntityToDto(usersRepository.save(user));
