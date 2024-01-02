@@ -25,7 +25,9 @@ public class Abonnement {
     @NotNull
     @NotEmpty
     private LocalDateTime date_debut;
-    //private LocalDate date_fin;
+    @NotNull
+    @NotEmpty
+    private LocalDate date_fin;
     @NotNull
     @NotEmpty
     private float nbre_litre;

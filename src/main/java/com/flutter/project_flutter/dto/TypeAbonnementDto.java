@@ -18,6 +18,7 @@ public class TypeAbonnementDto {
     private String libelle;
     private  float nbre_litre;
     private BigDecimal prix;
+    private int duree;
     private String description;
     private int partener_id;
 

@@ -14,6 +14,5 @@ public interface IUserServices {
     public void deleteUser(int id);
 
     UserDto updateUser(UserDto userDto, int id);
-    UserDto registerByAdmin(UserDto user);
     UserDto rechargeSolde(int id, BigDecimal somme);
 }

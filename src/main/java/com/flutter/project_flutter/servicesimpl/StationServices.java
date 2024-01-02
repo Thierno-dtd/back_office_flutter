@@ -54,7 +54,7 @@ public class StationServices implements IStationServices {
 
     @Override
     public StationDto updateStation(StationDto stationDto, int id) {
-        if(getOneStation(id) == null) new EntityNotFoundException(" La station que vous désirer modifier n'existe pas");
+        if(getOneStation(id) == null) throw  new EntityNotFoundException(" La station que vous désirer modifier n'existe pas");
         Station station = applicationMappers.convertDtoToEntity(stationDto);
         station.setId(id);
         return applicationMappers.convertEntityToDto(stationRepository.save(station));

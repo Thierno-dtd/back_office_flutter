@@ -28,8 +28,6 @@ public class TypeAbonnementService implements ITypeAbonnementService {
         Optional<TypeAbonnement> findTypeAbonne = this.typesAbonnementRepository.findByLibelle(typeAbonnementDto.getLibelle());
         if(findTypeAbonne.isPresent() || typeAbonnementDto == null) throw new InvalidEntityException("Ce type existe deja ou objet vide");
         TypeAbonnement typeAbonnement = applicationMappers.convertDtoToEntity(typeAbonnementDto);
-        System.out.println(typeAbonnementDto);
-        System.out.println(typeAbonnement);
         return applicationMappers
                 .convertEntityToDto(
                 typesAbonnementRepository
@@ -60,7 +58,7 @@ public class TypeAbonnementService implements ITypeAbonnementService {
 
     @Override
     public TypeAbonnementDto updateTA(TypeAbonnementDto typeAbonnementDto, int id) {
-        if(getOneTypeAbonnement(id) == null) new EntityNotFoundException("Le type d'abonnelent que vous voulez modifier n'existe pas");
+        if(getOneTypeAbonnement(id) == null) throw new EntityNotFoundException("Le type d'abonnelent que vous voulez modifier n'existe pas");
         TypeAbonnement typeAbonnement = applicationMappers.convertDtoToEntity(typeAbonnementDto);
         typeAbonnement.setId(id);
         return applicationMappers.convertEntityToDto(typesAbonnementRepository.save(typeAbonnement));

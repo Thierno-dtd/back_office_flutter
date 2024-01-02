@@ -1,6 +1,7 @@
 package com.flutter.project_flutter.entites;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -23,8 +24,7 @@ public class DepenseEssence {
     @NotNull
     @NotEmpty
     private LocalDateTime date_preleve;
-    @NotNull
-    @NotEmpty
+    @NotBlank(message = "Le nombre de litre prélebé ne peeut pas etre vide")
     private  float nbreLitreConsommer;
     @NotNull
     @NotEmpty

@@ -1,6 +1,7 @@
 package com.flutter.project_flutter.entites;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -20,16 +21,16 @@ public class TypeAbonnement {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    @NotNull
-    @NotEmpty
+    @NotBlank(message = "Le champ Libelle du type d'abonnement ne peut pas être vide.")
     private String libelle;
-    @NotNull
-    @NotEmpty
+    @NotBlank(message = "Le nombre de litre du type d'abonnemen ne peut pas être vide.")
     private  float nbre_litre;
-    @NotNull
-    @NotEmpty
+    @NotBlank(message = "Le prix du type d'abonnement ne peut pas être vide.")
     private BigDecimal prix;
+
     private String description;
+    @NotBlank(message = "Le nombre de mois pour ce type d'abonnement ne peut pas etre vide")
+    private int duree;
 
     @ManyToOne
     @JoinColumn(name = "partener_id")

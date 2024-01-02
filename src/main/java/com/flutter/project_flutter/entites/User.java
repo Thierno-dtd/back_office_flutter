@@ -3,6 +3,7 @@ package com.flutter.project_flutter.entites;
 import com.flutter.project_flutter.constants.TypeRoles;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -26,21 +27,15 @@ public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    @NotNull
-    @NotEmpty
+    @NotBlank(message = "Le champ nom ne peut pas être vide.")
     private String name;
-    @NotNull
-    @NotEmpty
+    @NotBlank(message = "Le champ prénom ne peut pas être vide.")
     private String pname;
-    @NotNull
-    @NotEmpty
-    @Email
+    @Email(message = "L'adresse email n'est pas valide.")
     private String email;
-    @NotNull
-    @NotEmpty
+    @NotBlank(message = "Le champs password ne peut pas être vide.")
     private String passwd;
-    @NotNull
-    @NotEmpty
+    @NotBlank(message = "Le champs solde ne peut pas être vide.")
     private BigDecimal solde;
     @Column(name = "userRole",nullable = false)
     @Enumerated(EnumType.STRING)

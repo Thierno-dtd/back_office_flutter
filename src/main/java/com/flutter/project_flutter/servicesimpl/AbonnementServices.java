@@ -6,6 +6,7 @@ import com.flutter.project_flutter.dto.UserDto;
 import com.flutter.project_flutter.entites.Abonnement;
 import com.flutter.project_flutter.entites.User;
 import com.flutter.project_flutter.exceptions.EntityNotFoundException;
+import com.flutter.project_flutter.exceptions.InvalidEntityException;
 import com.flutter.project_flutter.mappers.ApplicationMappers;
 import com.flutter.project_flutter.repositories.AbonnementRepository;
 import com.flutter.project_flutter.repositories.UserRepository;
@@ -40,8 +41,7 @@ public class AbonnementServices implements IAbonnementServices {
         UserDto client = userService.getOneUser(abonnement.getClient().getId());
 
         if(abonnement.getPrix().compareTo(client.getSolde()) > 0){
-            new RuntimeException("Votre solde est insuffisant pour souscrire cette abonnement");
-            return AbonnementDtoEntity.builder().build();
+            throw new InvalidEntityException("Votre solde est insuffisant pour souscrire cette abonnement");
         }
         client.setSolde((client.getSolde().subtract(abonnement.getPrix())));
         userService.updateUser(client, abonnement.getClient().getId());

@@ -26,24 +26,11 @@ public class UserService implements IUserServices {
     private final UserRepository usersRepository;
     private final ApplicationMappers applicationMappers;
 
-    @Override
-    public UserDto registerByAdmin(UserDto userDto) {
-        if(userDto==null){
-            log.error("user pass is not valid");
-        }
-        return applicationMappers.convertEntityToDto(
-                usersRepository.save(applicationMappers.convertDtoToEntity(userDto))
-        );
-    }
 
     @Override
     public UserDto rechargeSolde(int id, BigDecimal somme) {
+        if(somme.compareTo(BigDecimal.ZERO) <= 0) throw new InvalidEntityException("Le montant est est inférieur ou égale à 0");
         UserDto userDto = getOneUser(id);
-       /* if(userDto == null)
-        {
-            // je te laisse gerer
-        }
-        if*/
         userDto.setSolde(somme.add(userDto.getSolde()));
         return  userDto;
     }

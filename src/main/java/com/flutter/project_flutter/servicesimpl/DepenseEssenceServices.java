@@ -29,7 +29,6 @@ public class DepenseEssenceServices implements IDepenseEssenceServices {
         //Optional<DepenseEssence> findDepenseEssence = this.depenseEssenceRepository.findById(depenseEssenceDto.getId());
         //if(findDepenseEssence.isPresent() || depenseEssenceDto == null) throw new RuntimeException("Ce depenseEssence est deja utiliser");
         DepenseEssence depenseEssence = applicationMappers.convertDtoToEntity(depenseEssenceDto);
-        System.out.println(depenseEssence);
         Abonnement abonnement = abonnementRepository
                 .findById(
                         depenseEssence
@@ -40,8 +39,7 @@ public class DepenseEssenceServices implements IDepenseEssenceServices {
 float nbre_litre_restant = abonnement.getNbre_litre()-abonnement.getNbre_litre_use();
         if ( nbre_litre_restant < depenseEssence.getNbreLitreConsommer()) {
             if (nbre_litre_restant == 0.0f) {
-                new InvalidOperationException("Vous aviez plus de litre d'essence disponible pour cette abonnement ");
-                return DepenseEssenceDtoEntity.builder().build();
+                throw new InvalidOperationException("Vous aviez plus de litre d'essence disponible pour cette abonnement ");
             }
             else {
                 new InvalidOperationException("Le nombre de litre consommé est superieur que ce que vous aviez sur le compte, il vous reste a payer pour "+(depenseEssence.getNbreLitreConsommer()-nbre_litre_restant)+"l.");
