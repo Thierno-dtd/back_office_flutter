@@ -1,7 +1,6 @@
 package com.flutter.project_flutter.exceptions;
 
 import lombok.Getter;
-import org.springframework.web.bind.annotation.GetMapping;
 
 public class EntityNotFoundException extends RuntimeException {
     @Getter

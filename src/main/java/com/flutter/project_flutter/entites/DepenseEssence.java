@@ -9,7 +9,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
@@ -21,19 +20,13 @@ public class DepenseEssence {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    @NotNull
-    @NotEmpty
     private LocalDateTime date_preleve;
-    @NotBlank(message = "Le nombre de litre prélebé ne peeut pas etre vide")
     private  float nbreLitreConsommer;
-    @NotNull
-    @NotEmpty
+
     @ManyToOne
     @JoinColumn(name = "station_id")
     private Station station;
     @ManyToOne
-    @NotNull
-    @NotEmpty
     @JoinColumn(name = "abonnement_id")
     private Abonnement abonnements;
 }

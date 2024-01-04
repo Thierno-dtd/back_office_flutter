@@ -1,6 +1,5 @@
 package com.flutter.project_flutter.dto;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.flutter.project_flutter.constants.TypeRoles;
 import com.flutter.project_flutter.entites.User;
 import lombok.AllArgsConstructor;
@@ -9,7 +8,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
-import java.util.Collection;
 
 @Data
 @Builder

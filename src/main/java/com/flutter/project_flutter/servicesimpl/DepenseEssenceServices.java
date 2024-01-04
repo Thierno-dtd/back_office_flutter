@@ -26,8 +26,6 @@ public class DepenseEssenceServices implements IDepenseEssenceServices {
     private AbonnementRepository abonnementRepository;
     @Override
     public DepenseEssenceDtoEntity registerDepenseEssence(DepenseEssenceDto depenseEssenceDto) {
-        //Optional<DepenseEssence> findDepenseEssence = this.depenseEssenceRepository.findById(depenseEssenceDto.getId());
-        //if(findDepenseEssence.isPresent() || depenseEssenceDto == null) throw new RuntimeException("Ce depenseEssence est deja utiliser");
         DepenseEssence depenseEssence = applicationMappers.convertDtoToEntity(depenseEssenceDto);
         Abonnement abonnement = abonnementRepository
                 .findById(
@@ -36,32 +34,64 @@ public class DepenseEssenceServices implements IDepenseEssenceServices {
                                 .getId()
                 )
                 .get();
-float nbre_litre_restant = abonnement.getNbre_litre()-abonnement.getNbre_litre_use();
+        LocalDateTime finTime = abonnement.getDateFin();
+        LocalDateTime ldt = LocalDateTime.now();
+        if(compareDate(ldt,finTime ) > 0) {
+            List<Abonnement> listDabonnementAvantFinDuDelai = abonnementRepository
+                    .findByClientIdAndDateDebutAfterAndDateFinBefore
+                            (abonnement
+                                    .getClient()
+                                    .getId()
+                            ,finTime
+                            ,finTime.plusDays(2));
+            System.out.println(listDabonnementAvantFinDuDelai);
+            if(listDabonnementAvantFinDuDelai.isEmpty()) throw new InvalidOperationException(" Votre abonnement est expiré");
+            else {
+                if(!listDabonnementAvantFinDuDelai
+                        .stream()
+                        .anyMatch(obj -> obj
+                                .getTypeAbonnement()
+                                .getPartenerTA()
+                                .getId() == abonnement.getTypeAbonnement().getPartenerTA().getId()
+                        )
+                ){
+                    log.error("pute");
+                    throw new InvalidOperationException(" Votre abonnement est expiré");
+                }
+            }
+
+
+        }
+        float nbre_litre_restant = abonnement.getNbre_litre()-abonnement.getNbre_litre_use();
         if ( nbre_litre_restant < depenseEssence.getNbreLitreConsommer()) {
             if (nbre_litre_restant == 0.0f) {
                 throw new InvalidOperationException("Vous aviez plus de litre d'essence disponible pour cette abonnement ");
             }
             else {
                 new InvalidOperationException("Le nombre de litre consommé est superieur que ce que vous aviez sur le compte, il vous reste a payer pour "+(depenseEssence.getNbreLitreConsommer()-nbre_litre_restant)+"l.");
-                abonnement
+                /*abonnement
                         .setNbre_litre_use(
                                 abonnement
                                         .getNbre_litre()
                         );
-                abonnementRepository.save(abonnement);
+                abonnementRepository.save(abonnement);*/
 
             }
         }
         else {
-            abonnement
+            /*abonnement
                     .setNbre_litre_use(abonnement.getNbre_litre_use()+depenseEssence.getNbreLitreConsommer());
-            abonnementRepository.save(abonnement);
+            abonnementRepository.save(abonnement);*/
         }
-        depenseEssence.setDate_preleve(LocalDateTime.now());
-        return  applicationMappers.convertEntityToDto(
+        depenseEssence.setDate_preleve(ldt);
+        return  null /*applicationMappers.convertEntityToDto(
                 depenseEssenceRepository.save(depenseEssence)
-        );
+        )*/;
     }
+    private int compareDate(LocalDateTime date1, LocalDateTime date2){
+        return date1.compareTo(date2);
+    }
+
     @Override
     public List<DepenseEssenceDtoEntity> getAllDepenseEssence() {
         List<DepenseEssence> listDepenseEssence =  depenseEssenceRepository.findAll();

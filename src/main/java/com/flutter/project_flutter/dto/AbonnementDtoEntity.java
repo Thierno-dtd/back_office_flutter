@@ -1,6 +1,5 @@
 package com.flutter.project_flutter.dto;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -15,7 +14,7 @@ import java.time.LocalDateTime;
 public class AbonnementDtoEntity {
 
     private LocalDateTime date_debut;
-    //private LocalDate date_fin;
+    private LocalDateTime date_fin;
 
     private float nbre_litre;
 

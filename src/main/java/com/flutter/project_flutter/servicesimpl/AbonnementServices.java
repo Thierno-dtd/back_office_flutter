@@ -4,12 +4,10 @@ import com.flutter.project_flutter.dto.AbonnementDto;
 import com.flutter.project_flutter.dto.AbonnementDtoEntity;
 import com.flutter.project_flutter.dto.UserDto;
 import com.flutter.project_flutter.entites.Abonnement;
-import com.flutter.project_flutter.entites.User;
 import com.flutter.project_flutter.exceptions.EntityNotFoundException;
 import com.flutter.project_flutter.exceptions.InvalidEntityException;
 import com.flutter.project_flutter.mappers.ApplicationMappers;
 import com.flutter.project_flutter.repositories.AbonnementRepository;
-import com.flutter.project_flutter.repositories.UserRepository;
 import com.flutter.project_flutter.services.IAbonnementServices;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -30,13 +28,14 @@ public class AbonnementServices implements IAbonnementServices {
     @Override
     public AbonnementDtoEntity registerAbonnement(AbonnementDto abonnementDto) {
 
-        //Optional<Abonnement> findstation = this.abonnementRepository.findById(abonnementDto.getId());
-        //if(findstation.isPresent() || abonnementDto == null) throw new RuntimeException("Ce abonnement est deja utiliser");
         Abonnement abonnement = applicationMappers.convertDtoToEntity(abonnementDto);
         abonnement.setPrix(typeAbonnementService.getOneTypeAbonnement(abonnementDto.getTypeAbonnement_id()).getPrix());
         abonnement.setNbre_litre(typeAbonnementService.getOneTypeAbonnement(abonnementDto.getTypeAbonnement_id()).getNbre_litre());
         LocalDateTime ldt = LocalDateTime.now();
-        abonnement.setDate_debut(ldt);
+        abonnement.setDateDebut(ldt.minusDays(1));
+        abonnement.setDateFin(ldt.minusDays(1));
+        // de base c'est ldt dans le setDateDebut dans le setDateFin c'est s'instruction que j'ai commenté en bas
+        //ldt.plusMonths(typeAbonnementService.getOneTypeAbonnement(abonnementDto.getTypeAbonnement_id()).getDuree())
         abonnement.setNbre_litre_use(0);
         UserDto client = userService.getOneUser(abonnement.getClient().getId());
 

@@ -1,11 +1,9 @@
 package com.flutter.project_flutter.controllers;
 
-import com.flutter.project_flutter.constants.TypeRoles;
 import com.flutter.project_flutter.dto.UserDto;
 import com.flutter.project_flutter.servicesimpl.UserService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
-import lombok.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

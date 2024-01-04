@@ -11,7 +11,7 @@ import java.util.List;
 
 @RestController @AllArgsConstructor
 @RequestMapping("/depenseEssence")
-public class DepenseEnssence {
+public class DepenseEnssenceController {
     private DepenseEssenceServices depenseEssenceServices;
 
     @GetMapping("/")

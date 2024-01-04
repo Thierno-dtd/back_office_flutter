@@ -13,8 +13,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -32,6 +30,7 @@ public class UserService implements IUserServices {
         if(somme.compareTo(BigDecimal.ZERO) <= 0) throw new InvalidEntityException("Le montant est est inférieur ou égale à 0");
         UserDto userDto = getOneUser(id);
         userDto.setSolde(somme.add(userDto.getSolde()));
+        updateUser(userDto, id);
         return  userDto;
     }
     @Override
