@@ -1,8 +1,7 @@
 package com.flutter.project_flutter.entites;
 
+import com.flutter.project_flutter.constants.AbonnementStaut;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -25,8 +24,12 @@ public class Abonnement {
     private LocalDateTime dateDebut;
     private LocalDateTime dateFin;
     private float nbre_litre;
+    private float bonus;
     private BigDecimal prix;
     private float nbre_litre_use;
+    @Column(name = "statut", nullable = false)
+    @Enumerated(EnumType.STRING)
+    private AbonnementStaut statut;
     @ManyToOne
     @JoinColumn(name = "typesAbonnement_id")
     private TypeAbonnement typeAbonnement;

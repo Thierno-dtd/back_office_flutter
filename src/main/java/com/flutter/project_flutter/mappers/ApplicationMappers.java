@@ -9,8 +9,6 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class ApplicationMappers {
-    @Autowired
-    private UserRepository userRepository;
     public UserDto convertEntityToDto(User user){
         UserDto userDto = new UserDto();
 
@@ -90,8 +88,11 @@ public class ApplicationMappers {
     public AbonnementDtoEntity convertEntityToDto(Abonnement abonnement){
         AbonnementDtoEntity abonnementDtoEntity = new AbonnementDtoEntity();
         BeanUtils.copyProperties(abonnement, abonnementDtoEntity);
+        abonnementDtoEntity.setDate_debut(abonnement.getDateDebut());
+        abonnementDtoEntity.setDate_fin(abonnement.getDateFin());
         abonnementDtoEntity.setTypeAbonnement_id(abonnement.getTypeAbonnement().getId());
         abonnementDtoEntity.setClient_id(abonnement.getClient().getId());
+        abonnementDtoEntity.setStaut(abonnement.getStatut());
         return abonnementDtoEntity;
     }
 
