@@ -31,6 +31,7 @@ public class User implements UserDetails {
     @NotBlank(message = "Le champ prénom ne peut pas être vide.")
     private String pname;
     @Email(message = "L'adresse email n'est pas valide.")
+    @Column(unique = true)
     private String email;
     @NotBlank(message = "Le champs password ne peut pas être vide.")
     private String passwd;
